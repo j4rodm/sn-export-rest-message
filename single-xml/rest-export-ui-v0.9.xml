@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2019-01-08 23:20:57">
+<sys_ui_action action="INSERT_OR_UPDATE">
+<action_name>act_export_rest</action_name>
+<active>true</active>
+<client>false</client>
+<comments/>
+<condition>gs.hasRole('admin')</condition>
+<form_action>true</form_action>
+<form_button>false</form_button>
+<form_context_menu>false</form_context_menu>
+<form_link>true</form_link>
+<form_style/>
+<hint/>
+<list_action>false</list_action>
+<list_banner_button>false</list_banner_button>
+<list_button>false</list_button>
+<list_choice>false</list_choice>
+<list_context_menu>false</list_context_menu>
+<list_link>false</list_link>
+<list_save_with_form_button>false</list_save_with_form_button>
+<list_style/>
+<name>REST Message to Update Set</name>
+<onclick/>
+<order>100</order>
+<script><![CDATA[//Commit any changes to the record
+current.update();
+
+// sys_rest_message 
+// sys_rest_message_fn - Methods
+// sys_rest_message_fn_headers - Headers
+// sys_rest_message_fn_param_defs - Query Parameters
+// sys_rest_message_fn_parameters - Variable Substitutions
+
+
+//Push the update into the current update set
+var um = new GlideUpdateManager2();
+um.saveRecord(current);
+gs.addInfoMessage('1 - REST Message recorded into update set');
+
+
+//Methods sys_rest_message_fn
+var meth = new GlideRecord('sys_rest_message_fn');
+meth.addQuery('rest_message',current.sys_id);
+meth.query();
+while(meth.next()){
+	um.saveRecord(meth);
+}
+gs.addInfoMessage('2 - Methods recorded:'+meth.getRowCount());
+
+
+//Headers sys_rest_message_fn_headers
+var head = new GlideRecord('sys_rest_message_fn_headers');
+head.addQuery('rest_message_function.rest_message',current.sys_id);
+head.query();
+while(head.next()){
+	um.saveRecord(head);
+}
+gs.addInfoMessage('3.1 - Headers recorded:'+head.getRowCount());
+
+
+//Headers sys_rest_message_headers
+var head2 = new GlideRecord('sys_rest_message_headers');
+head2.addQuery('rest_message',current.sys_id);
+head2.query();
+while(head2.next()){
+	um.saveRecord(head2);
+}
+gs.addInfoMessage('3.2 - Headers recorded:'+head2.getRowCount());
+
+
+
+
+//Query Params sys_rest_message_fn_param_defs
+var param = new GlideRecord('sys_rest_message_fn_param_defs');
+param.addQuery('rest_message_function.rest_message',current.sys_id);
+param.query();
+while(param.next()){
+	um.saveRecord(param);
+}
+gs.addInfoMessage('4 - Query Parameters recorded:'+param.getRowCount());
+
+
+//Variable Substitutions sys_rest_message_fn_parameters
+var subs = new GlideRecord('sys_rest_message_fn_parameters');
+subs.addQuery('rest_message_function.rest_message',current.sys_id);
+subs.query();
+while(subs.next()){
+	um.saveRecord(subs);
+}
+gs.addInfoMessage('4 - Variable Substitutions recorded:'+subs.getRowCount());
+
+
+//Query for the current update set to display info message
+var setID = gs.getPreference('sys_update_set');
+var us = new GlideRecord('sys_update_set');
+us.get(setID);
+
+//Display info message and reload the form
+gs.addInfoMessage('All records included in <a href="sys_update_set.do?sys_id=' + setID + '">' + us.name + '</a> update set.');
+action.setRedirectURL(current);
+
+
+
+
+
+
+]]></script>
+<show_insert>false</show_insert>
+<show_multiple_update>false</show_multiple_update>
+<show_query>false</show_query>
+<show_update>true</show_update>
+<sys_class_name>sys_ui_action</sys_class_name>
+<sys_created_by>jarodm</sys_created_by>
+<sys_created_on>2019-01-08 22:58:38</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_domain_path>/</sys_domain_path>
+<sys_id>be437c874fb6a30023162b8ca310c7b7</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_name>REST Message to Update Set</sys_name>
+<sys_overrides display_value=""/>
+<sys_package display_value="Global" source="global">global</sys_package>
+<sys_policy/>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_ui_action_be437c874fb6a30023162b8ca310c7b7</sys_update_name>
+<sys_updated_by>jarodm</sys_updated_by>
+<sys_updated_on>2019-01-08 23:12:56</sys_updated_on>
+<table>sys_rest_message</table>
+<ui11_compatible>true</ui11_compatible>
+<ui16_compatible>true</ui16_compatible>
+</sys_ui_action>
+</unload>
